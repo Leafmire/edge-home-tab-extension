@@ -1,3 +1,9 @@
+chrome.runtime.onInstalled.addListener(function() {
+	chrome.storage.sync.set({new_tab_url: "https://www.google.com/"}, function() {
+		console.log("New Tab URL Set");
+	});
+});
+
 chrome.tabs.onCreated.addListener(
 	  async function(tab) {	
 		 const newURL = await chrome.storage.sync.get(['new_tab_url']).then((result) => {
