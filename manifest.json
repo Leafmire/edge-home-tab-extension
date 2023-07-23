@@ -1,16 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Edge-Tab-Homepage",
+  "name": "Edge-NewTab-Homepage",
   "version": "1.0",
 
-  "background": {
-	"service_worker": "service_worker.js"
-  },
   "action": {
-	"default_popup": "popup.html"
+	  "default_popup": "popup/popup.html"
   },
-  "permissions": [ "storage", "tabs", "activeTab", "scripting" ],
-  "default_locale": "ko",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [ "storage", "tabs", "activeTab" ],
   "description": "A plain text description",
   "icons": {}
 }
