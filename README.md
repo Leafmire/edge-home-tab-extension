@@ -42,4 +42,31 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 ```
 
-This code snippet sets the default new tab URL to "https://www.google.com/" when the extension is installed or updated. It utilizes the chrome.storage.sync API to store the URL in the synchronized storage, ensuring the data is synced across devices if the user is signed in.
+This code snippet sets the default new tab URL to "https://www.google.com/" when the extension is installed or updated. It utilizes the `chrome.storage.sync` API to store the URL in the synchronized storage, ensuring the data is synced across devices if the user is signed in.
+
+### Handling New Tab Creation
+
+```javascript
+chrome.tabs.onCreated.addListener(
+    async function(tab) {    
+        const newURL = await chrome.storage.sync.get(['new_tab_url']).then((result) => {
+            return result.new_tab_url;
+        });
+        if (tab.pendingUrl == "chrome://newtab/" || tab.pendingUrl == "edge://newtab/") {
+            chrome.tabs.update(tab.id, { url: newURL });
+        }
+    }
+);
+```
+This code snippet listens to the `onCreated` event, which is triggered when a new tab is created. It checks whether the new tab's pending URL is the default new tab page ("chrome://newtab/" or "edge://newtab/"). If it is, it updates the tab's URL to the custom URL specified by the user in the extension settings.
+
+### Logging Tab Updates
+
+```javascript
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if(changeInfo.url) {
+        console.log("TabUpdated: " + changeInfo.url);
+    }
+});
+```
+This part of the code listens to the `onUpdated` event, which is triggered when a tab is updated, such as when the URL changes. It logs the updated URL to the console for debugging purposes.
